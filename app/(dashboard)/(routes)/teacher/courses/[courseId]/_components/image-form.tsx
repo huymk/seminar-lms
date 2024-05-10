@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 import axios from "axios";
-import { Courses } from "@prisma/client";
+import { Course } from "@prisma/client";
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { FileUpload } from "@/components/file-upload";
 
 interface ImageFormProps {
-  initialData: Courses;
+  initialData: Course;
   courseId: string;
 }
 
@@ -32,7 +32,7 @@ const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Course title updated successfully");
+      toast.success("Course Image updated successfully");
       toggleEditing();
       router.refresh();
     } catch {

@@ -14,7 +14,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Courses {
+model Course {
   id String @id @default(uuid())
   userId String
   title String @db.Text
@@ -24,9 +24,9 @@ model Courses {
   isPublished Boolean @default(false)
 
   categoryId String?
-  category Categories? @relation(fields: [categoryId], references: [id])
+  category Category? @relation(fields: [categoryId], references: [id])
 
-  attachments Attachments[]
+  attachment Attachments[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -34,10 +34,10 @@ model Courses {
   @@index([categoryId])
 }
 
-model Categories {
+model Category {
   id String @id @default(uuid())
   name String @unique
-  courses Courses[]
+  course Course[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -50,7 +50,7 @@ model Attachments {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  Courses Courses @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  Course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@index([courseId])
 }
