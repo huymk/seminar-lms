@@ -62,7 +62,7 @@ const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
       <div className="font-medium flex items-center justify-between">
         Course title
         <Button onClick={toggleEditing} variant="ghost">
-          {!isEditing ? (
+          {isEditing ? (
             <>Cancel</>
           ) : (
             <>
@@ -72,7 +72,7 @@ const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
           )}
         </Button>
       </div>
-      {isEditing ? (
+      {!isEditing ? (
         <p className="text-sm mt-2">{initialData.title}</p>
       ) : (
         <Form {...form}>

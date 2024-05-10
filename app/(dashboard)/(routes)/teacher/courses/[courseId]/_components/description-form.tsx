@@ -4,6 +4,7 @@ import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { Courses } from "@prisma/client";
 
 import {
   Form,
@@ -16,16 +17,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { title } from "process";
+
 import { Pencil } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { Textarea } from "@/components/ui/textarea";
 
 interface DescriptionFormProps {
-  initialData: {
-    description: string;
-  };
+  initialData: Courses;
   courseId: string;
 }
 
@@ -42,7 +43,9 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData,
+    defaultValues: {
+      description: initialData?.description || " ",
+    },
   });
 
   const { isSubmitting, isValid } = form.formState;
@@ -73,7 +76,14 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
         </Button>
       </div>
       {!isEditing ? (
-        <p className="text-sm mt-2">{initialData.description}</p>
+        <p
+          className={cn(
+            "text-sm mt-2",
+            !initialData.description && "text-slate-500 italic"
+          )}
+        >
+          {initialData.description || "No description"}
+        </p>
       ) : (
         <Form {...form}>
           <form
@@ -86,9 +96,9 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
+                    <Textarea
                       disabled={isSubmitting}
-                      placeholder="e.g 'Advance Web development'"
+                      placeholder="e.g. 'This course is about...'"
                       {...field}
                     />
                   </FormControl>
