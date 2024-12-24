@@ -15,42 +15,6 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                script {
-                    // Run Node.js inside Docker container using a shell step
-                    sh 'docker run --rm -v $(pwd):/usr/src/app -w /usr/src/app node:16 npm install'
-                }
-            }
-        }
-
-        stage('Run Linter') {
-            steps {
-                script {
-                    // Run ESLint or any other linter you've set up
-                    sh 'docker run --rm -v $(pwd):/usr/src/app -w /usr/src/app node:16 npm run lint'
-                }
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
-                script {
-                    // Run your tests, for example with Jest
-                    sh 'docker run --rm -v $(pwd):/usr/src/app -w /usr/src/app node:16 npm test'
-                }
-            }
-        }
-
-        stage('Build Next.js') {
-            steps {
-                script {
-                    // Build the Next.js project
-                    sh 'docker run --rm -v $(pwd):/usr/src/app -w /usr/src/app node:16 npm run build'
-                }
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 script {
