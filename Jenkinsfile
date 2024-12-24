@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:16' // Use a Node.js Docker image (can be any version you need)
-            label 'docker'  // Optional, specify the label if necessary
-        }
-    }
+    agent any  // Runs the pipeline on any available agent
 
     environment {
         DOCKER_REGISTRY = 'docker.io'
@@ -23,8 +18,8 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    // Install Node.js dependencies using npm
-                    sh 'npm install'
+                    // Run Node.js inside Docker container using a shell step
+                    sh 'docker run --rm -v $(pwd):/usr/src/app -w /usr/src/app node:16 npm install'
                 }
             }
         }
@@ -33,7 +28,7 @@ pipeline {
             steps {
                 script {
                     // Run ESLint or any other linter you've set up
-                    sh 'npm run lint'
+                    sh 'docker run --rm -v $(pwd):/usr/src/app -w /usr/src/app node:16 npm run lint'
                 }
             }
         }
@@ -42,7 +37,7 @@ pipeline {
             steps {
                 script {
                     // Run your tests, for example with Jest
-                    sh 'npm test'
+                    sh 'docker run --rm -v $(pwd):/usr/src/app -w /usr/src/app node:16 npm test'
                 }
             }
         }
@@ -51,7 +46,7 @@ pipeline {
             steps {
                 script {
                     // Build the Next.js project
-                    sh 'npm run build'
+                    sh 'docker run --rm -v $(pwd):/usr/src/app -w /usr/src/app node:16 npm run build'
                 }
             }
         }
@@ -60,9 +55,7 @@ pipeline {
             steps {
                 script {
                     // Build the Docker image
-                    sh '''
-                    docker build -t ${DOCKER_REGISTRY}/${DOCKER_REPO}:${IMAGE_TAG} .
-                    '''
+                    sh 'docker build -t ${DOCKER_REGISTRY}/${DOCKER_REPO}:${IMAGE_TAG} .'
                 }
             }
         }
