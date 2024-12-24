@@ -13,8 +13,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from the Git repository
-                git 'https://github.com/huymk/seminar-lms.git'
+                // Checkout the code from the Git repository and specify the 'main' branch
+                git url: 'https://github.com/huymk/seminar-lms.git', branch: 'main'
             }
         }
 
