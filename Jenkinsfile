@@ -1,11 +1,5 @@
 pipeline {
     agent any
-    
-    checkout scm: [
-    $class: 'GitSCM', 
-    branches: [[name: '*/main']],  // Change to '*/main' if the default branch is 'main'
-    userRemoteConfigs: [[url: 'https://github.com/huymk/seminar-lms.git']]
-]
 
     environment {
         // Define environment variables for Docker and Node
