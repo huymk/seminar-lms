@@ -1,19 +1,21 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:16' // Use a Node.js Docker image (can be any version you need)
+            label 'docker'  // Optional, specify the label if necessary
+        }
+    }
 
     environment {
-        // Define environment variables for Docker and Node
-        NODE_HOME = '/usr/local/node'  // Path to Node.js, change if needed
-        PATH = "${env.NODE_HOME}/bin:${env.PATH}"
         DOCKER_REGISTRY = 'docker.io'
-        DOCKER_REPO = 'huymk/seminar-lms' // Replace with your Docker Hub repository name
-        IMAGE_TAG = "${env.BUILD_ID}" // Tag the Docker image with the Jenkins build ID
+        DOCKER_REPO = 'huymk/seminar-lms'
+        IMAGE_TAG = "${env.BUILD_ID}"  // Tag the Docker image with the Jenkins build ID
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from the Git repository and specify the 'main' branch
+                // Checkout the code from the Git repository
                 git url: 'https://github.com/huymk/seminar-lms.git', branch: 'main'
             }
         }
@@ -21,7 +23,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    // Install Node.js dependencies
+                    // Install Node.js dependencies using npm
                     sh 'npm install'
                 }
             }
